@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{index :: head}"></head>
+<body>
+
+<nav th:replace="~{index :: navbar}"></nav>
+
+<div class="container-fluid p-5 bg-secondary-subtle text-center">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <span class="h1">Dettaglio</span>
+            <h1 th:text="${article.title}">Title</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 d-flex flex-column">
+            <img th:if="${article.image != null}" th:src="${article.image.path}" class="img-fluid rounded mb-4" alt="Immagine articolo">
+            <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="img-fluid rounded mb-4" alt="Immagine di default">
+
+            <div class="text-center">
+                <h2 th:text="${article.subtitle}">Subtitle</h2>
+
+                <p class="fs-5" th:if="${article.category != null}">Categoria:
+                    <a th:href="@{/categories/search/{id}(id=${article.category.id})}" class="text-capitalize fw-bold text-muted"
+                       th:text="${article.category.name}">categoria</a>
+                </p>
+                <p class="fs-5" th:if="${article.category == null}">Nessuna categoria</p>
+
+                <div class="text-muted my-3">
+                    <p>Redatto il <span th:text="${#temporals.format(article.publishDate, 'dd/MM/yyyy')}">data</span> da
+                        <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
+                            <span th:text="${article.user.username}">user</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+            <p th:text="${article.body}">Body</p>
+
+            <div class="text-center">
+                <a href="#" class="text-secondary" onclick="goBack()">Torna indietro</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{index :: footer}"></footer>
+<script th:replace="~{index :: bootstrapScript}"></script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{index :: head}"></head>
+<body>
+
+<nav th:replace="~{index :: navbar}"></nav>
+
+<div class="container mt-3">
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p class="mb-0" th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p class="mb-0" th:text="${errorMessage}"></p>
+    </div>
+</div>
+
+<div class="container min-vh-100">
+    <div class="row">
+        <div class="col-12 my-5 d-flex justify-content-center align-items-center">
+            <span class="h1">Dashboard Writer</span>
+        </div>
+
+        <div class="col-12 my-3 d-flex justify-content-center align-items-center">
+            <span class="h3" th:text="${title}">I tuoi articoli</span>
+            <a th:href="@{/articles/create}" class="btn btn-primary m-2">
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
+
+        <div class="col-12">
+            <table class="table table-striped table-responsive-lg align-middle">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Titolo</th>
+                    <th>Sottotitolo</th>
+                    <th>Categoria</th>
+                    <th>Stato</th>
+                    <th class="text-end">Azioni</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="article : ${articles}">
+                    <td th:text="${article.id}"></td>
+                    <td th:text="${article.title}"></td>
+                    <td th:text="${article.subtitle}"></td>
+                    <td th:if="${article.category != null}" th:text="${article.category.name}"></td>
+                    <td th:unless="${article.category != null}">Nessuna categoria</td>
+                    <td>
+                        <span th:if="${article.isAccepted == null}" class="badge bg-warning text-dark">In revisione</span>
+                        <span th:if="${article.isAccepted == true}" class="badge bg-success">Pubblicato</span>
+                        <span th:if="${article.isAccepted == false}" class="badge bg-danger">Rifiutato</span>
+                    </td>
+                    <td class="text-end">
+                        <a th:href="@{/articles/detail/{id}(id=${article.id})}" class="btn btn-primary m-1">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <a th:href="@{/articles/edit/{id}(id=${article.id})}" class="btn btn-warning m-1">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a th:href="@{/articles/delete/{id}(id=${article.id})}" class="btn btn-danger m-1"
+                           onclick="return confirm('Vuoi davvero cancellare questo articolo?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${articles.size() == 0}">
+                    <td colspan="6" class="text-center">Non hai ancora scritto nessun articolo</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{index :: footer}"></footer>
+<script th:replace="~{index :: bootstrapScript}"></script>
+
+</body>
+</html>
